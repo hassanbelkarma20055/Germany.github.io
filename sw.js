@@ -1,5 +1,5 @@
 // Offline support: the page, icons and fonts are kept on the phone after the first visit.
-const CACHE = "german-words-f6ca1abfa07f";
+const CACHE = "german-words-f2e0753e5382";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (event) => {
