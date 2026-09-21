@@ -542,18 +542,17 @@ html:not(.js) .topic-test { display: none; }
 
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
-    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    remove(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
 
   // ---- filtering (search text is pre-normalised the same way in build.py)
   const norm = (s) => String(s || "").toLowerCase().normalize("NFD")
     .replace(/[̀-ًͯ-ٰٟـ]/g, "").replace(/ß/g, "ss");
-  // ---- sections: closed by default, tap a title to open it; remembered on this device
-  const openSaved = new Set((() => {
-    try { return JSON.parse(store.get("wortschatz-open") || "[]"); } catch (e) { return []; }
-  })());
+  // ---- sections: every visit starts with all of them closed; what you open lasts only for this visit
+  store.remove("wortschatz-open");          // earlier versions kept the open sections on the device
+  const openSaved = new Set();              // only so that clearing the search box restores this visit's state
   const searching = () => $("#q").value.trim() !== "";
-  const saveOpen = () => store.set("wortschatz-open", JSON.stringify([...openSaved]));
 
   function setOpen(sec, open) {
     sec.classList.toggle("open", open);
@@ -572,14 +571,12 @@ html:not(.js) .topic-test { display: none; }
     const open = !sec.classList.contains("open");
     setOpen(sec, open);
     remember(sec, open);
-    saveOpen();
     updateAllButton();
   }
   $("#all-open").addEventListener("click", () => {
     const visible = [...document.querySelectorAll(".topic:not([hidden])")];
     const open = visible.some((s) => !s.classList.contains("open"));
     visible.forEach((s) => { setOpen(s, open); remember(s, open); });
-    saveOpen();
     updateAllButton();
   });
 
