@@ -1866,7 +1866,7 @@ html:not(.js) .topic-test { display: none; }
   // ---- Gespräch: an offline practice partner. It talks with the learner using only the website's recorded
   // sentences, tells about itself (its own facts are website sentences), remembers what the learner types about
   // themselves (on this device), and checks answers by voice (DTW) or typing (simple grammar rules).
-  const TALK = {"partner":{"land":["ich-komme-aus-marokko"],"stadt":["ich-wohne-in-kenitra"],"alter":["ich-bin-achtzehn-jahre-alt"],"beruf":["ich-bin-student"],"studium":["ich-studiere-medizin","ich-studiere-biologie","ich-studiere-wirtschaft","ich-studiere-jura","ich-studiere-chemie"],"muttersprache":["meine-muttersprache-ist-arabisch"],"sprachen":["ich-spreche-auch-franzoesisch","ich-spreche-auch-englisch"],"hobby":["mein-hobby-ist-auto-fahren","mein-hobby-ist-muay-thai-machen","meine-hobbys-sind-schwimmen-malen-und-reisen"],"deutsch":["ich-lerne-jetzt-deutsch"]},"moods":{"wochenende":["mein-wochenende-war-schoen","mein-wochenende-war-normal","mein-wochenende-war-schlecht"]},"openings":[[{"say":["wie-geht-es-dir"],"accept":["es-geht-mir-gut-danke","mir-geht-es-gut-danke"],"wrong_ar":"يسألك أنت وحدك: أجب بـ mir","asked_back":"es-geht-mir-auch-gut-danke"},{"hint_ar":"اسأل الشريك أيضًا: «وأنت؟»","accept":["und-dir"],"reply":"es-geht-mir-auch-gut-danke","skip_if_asked":true,"wrong_ar":"قل: Und dir?"}],[{"say":["wie-geht-es-ihnen"],"accept":["es-geht-mir-gut-danke","mir-geht-es-gut-danke","es-geht-uns-gut-danke","uns-geht-es-gut-danke"],"wrong_ar":"أجب بـ: Mir geht es gut, danke!","asked_back":"mir-geht-es-gut-danke"}],[{"hint_ar":"ابدأ أنت اليوم: اسأل الشريك كيف حاله","accept":["wie-geht-es-dir","wie-geht-es-ihnen"],"reply":"mir-geht-es-gut-danke","wrong_ar":"قل: Wie geht es dir?"},{"say":["und-dir"],"accept":["es-geht-mir-auch-gut-danke","es-geht-mir-gut-danke","mir-geht-es-gut-danke"],"wrong_ar":"قل: Es geht mir auch gut, danke!"}],[{"say":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"accept":["mein-wochenende-war-schoen","mein-wochenende-war-schlecht","mein-wochenende-war-normal"],"typed":"wochenende","partner":["wochenende"]}]],"smalltalk":[{"say":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"accept":["mein-wochenende-war-schoen","mein-wochenende-war-schlecht","mein-wochenende-war-normal"],"typed":"wochenende","partner":["wochenende"]},{"say":["sprechen-sie-spanisch"],"accept":["nein-leider-nicht","ja-ich-spreche-ein-bisschen-spanisch","ich-spreche-nur-deutsch-und-englisch"],"typed":"janein","reply":"nein-leider-nicht"},{"say":["sprichst-du-deutsch"],"accept":["ja-ich-spreche-ein-bisschen-spanisch","nein-leider-nicht"],"typed":"janein","partner":["deutsch"]}],"about_you":[{"slot":"name","say":["wie-heissen-sie","wie-heisst-du"],"accept":["ich-heisse","mein-name-ist"],"typed":"name"},{"slot":"familienname","say":["wie-ist-ihr-familienname"],"accept":["mein-familienname-ist"],"typed":"familienname"},{"slot":"land","say":["woher-kommen-sie","woher-kommst-du"],"partner":["land"],"accept":["ich-komme-aus-marokko","ich-komme-aus-deutschland","ich-komme-aus-oesterreich","ich-komme-aus-der-tuerkei","ich-komme-aus-der-schweiz","ich-komme-aus-der-ukraine","ich-komme-aus-den-usa","ich-komme-aus-den-niederlanden"],"typed":"land"},{"slot":"stadt","say":["wo-wohnen-sie","wo-wohnst-du"],"accept":["ich-wohne-in-kenitra"],"typed":"stadt","partner":["stadt"]},{"slot":"alter","say":["wie-alt-sind-sie"],"accept":["ich-bin-achtzehn-jahre-alt"],"typed":"alter","partner":["alter"]},{"slot":"beruf","say":["was-sind-sie-von-beruf","was-machen-sie"],"partner":["beruf","studium"],"accept":["ich-bin-student","ich-bin-schueler","ich-bin-lehrer","ich-bin-arzt","ich-studiere-medizin","ich-studiere-biologie","ich-studiere-wirtschaft","ich-studiere-jura","ich-studiere-chemie","ich-studiere-englisch","ich-studiere-franzoesisch","ich-werde-apotheker","ich-bin-mitarbeiter-bei-einer-autofirma","ich-arbeite-bei-einer-autofirma"],"typed":"beruf"},{"slot":"muttersprache","say":["was-ist-ihre-muttersprache"],"accept":["meine-muttersprache-ist-arabisch"],"typed":"muttersprache","partner":["muttersprache","sprachen"]},{"slot":"hobby","say":["was-ist-ihr-hobby"],"accept":["mein-hobby-ist-auto-fahren","mein-hobby-ist-muay-thai-machen","mein-hobby-ist","meine-hobbys-sind-schwimmen-malen-und-reisen","meine-hobbys-sind"],"typed":"hobby","partner":["hobby"]}],"ask_partner":[{"hint_ar":"اسأل الشريك: من أين هو؟","accept":["woher-kommen-sie","woher-kommst-du"],"partner":["land"]},{"hint_ar":"اسأل الشريك: أين يسكن؟","accept":["wo-wohnen-sie","wo-wohnst-du"],"partner":["stadt"]},{"hint_ar":"اسأل الشريك عن عمره","accept":["wie-alt-sind-sie"],"partner":["alter"]},{"hint_ar":"اسأل الشريك عن مهنته","accept":["was-sind-sie-von-beruf","was-machen-sie"],"partner":["beruf","studium"]},{"hint_ar":"اسأل الشريك عن لغته الأم","accept":["was-ist-ihre-muttersprache"],"partner":["muttersprache"]},{"hint_ar":"اسأل الشريك: ما هي اللغات التي يتكلمها؟","accept":["welche-sprachen-sprechen-sie"],"partner":["muttersprache","sprachen","deutsch"]},{"hint_ar":"اسأل الشريك عن هوايته","accept":["was-ist-ihr-hobby","was-sind-ihre-hobbys"],"partner":["hobby"]},{"hint_ar":"اسأل الشريك كيف حاله","accept":["wie-geht-es-dir","wie-geht-es-ihnen"],"reply":"mir-geht-es-gut-danke"},{"hint_ar":"اسأل الشريك عن عطلة نهاية أسبوعه","accept":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"partner":["wochenende"]},{"hint_ar":"اسأل الشريك: هل يتكلم الإسبانية؟","accept":["sprechen-sie-spanisch"],"reply":"nein-leider-nicht"}],"goodbye":"auf-wiedersehen"};
+  const TALK = {"partner":{"land":["ich-komme-aus-marokko"],"stadt":["ich-wohne-in-kenitra"],"alter":["ich-bin-achtzehn-jahre-alt"],"beruf":["ich-bin-student"],"studium":["ich-studiere-medizin","ich-studiere-biologie","ich-studiere-wirtschaft","ich-studiere-jura","ich-studiere-chemie"],"muttersprache":["meine-muttersprache-ist-arabisch"],"sprachen":["ich-spreche-auch-franzoesisch","ich-spreche-auch-englisch"],"hobby":["mein-hobby-ist-auto-fahren","mein-hobby-ist-muay-thai-machen","meine-hobbys-sind-schwimmen-malen-und-reisen"],"deutsch":["ich-lerne-jetzt-deutsch"]},"moods":{"wochenende":["mein-wochenende-war-schoen","mein-wochenende-war-normal","mein-wochenende-war-schlecht"]},"openings":[[{"say":["wie-geht-es-dir"],"accept":["es-geht-mir-gut-danke","mir-geht-es-gut-danke"],"wrong_ar":"يسألك أنت وحدك: أجب بـ mir","asked_back":"es-geht-mir-auch-gut-danke"},{"hint_ar":"اسأل الشريك أيضًا: «وأنت؟»","accept":["und-dir"],"reply":"es-geht-mir-auch-gut-danke","skip_if_asked":true,"wrong_ar":"قل: Und dir?"}],[{"say":["wie-geht-es-ihnen"],"accept":["es-geht-mir-gut-danke","mir-geht-es-gut-danke","es-geht-uns-gut-danke","uns-geht-es-gut-danke"],"wrong_ar":"أجب بـ: Mir geht es gut, danke!","asked_back":"mir-geht-es-gut-danke"}],[{"hint_ar":"ابدأ أنت اليوم: اسأل الشريك كيف حاله","accept":["wie-geht-es-dir","wie-geht-es-ihnen"],"reply":"mir-geht-es-gut-danke","wrong_ar":"قل: Wie geht es dir?"},{"say":["und-dir"],"accept":["es-geht-mir-auch-gut-danke","es-geht-mir-gut-danke","mir-geht-es-gut-danke"],"wrong_ar":"قل: Es geht mir auch gut, danke!"}],[{"say":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"accept":["mein-wochenende-war-schoen","mein-wochenende-war-schlecht","mein-wochenende-war-normal"],"typed":"wochenende","partner":["wochenende"]}]],"smalltalk":[{"say":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"accept":["mein-wochenende-war-schoen","mein-wochenende-war-schlecht","mein-wochenende-war-normal"],"typed":"wochenende","partner":["wochenende"]},{"say":["sprechen-sie-spanisch"],"accept":["nein-leider-nicht","ja-ich-spreche-ein-bisschen-spanisch","ich-spreche-nur-deutsch-und-englisch"],"typed":"janein","reply":"nein-leider-nicht"},{"say":["sprichst-du-deutsch"],"accept":["ja-ich-spreche-ein-bisschen-spanisch","nein-leider-nicht"],"typed":"janein","partner":["deutsch"]}],"about_you":[{"slot":"name","say":["wie-heissen-sie","wie-heisst-du"],"accept":["ich-heisse","mein-name-ist"],"typed":"name"},{"slot":"familienname","say":["wie-ist-ihr-familienname"],"accept":["mein-familienname-ist"],"typed":"familienname"},{"slot":"land","say":["woher-kommen-sie","woher-kommst-du"],"partner":["land"],"accept":["ich-komme-aus-marokko","ich-komme-aus-deutschland","ich-komme-aus-oesterreich","ich-komme-aus-der-tuerkei","ich-komme-aus-der-schweiz","ich-komme-aus-der-ukraine","ich-komme-aus-den-usa","ich-komme-aus-den-niederlanden"],"typed":"land"},{"slot":"stadt","say":["wo-wohnen-sie","wo-wohnst-du"],"accept":["ich-wohne-in-kenitra"],"typed":"stadt","partner":["stadt"]},{"slot":"alter","say":["wie-alt-sind-sie"],"accept":["ich-bin-achtzehn-jahre-alt"],"typed":"alter","partner":["alter"]},{"slot":"beruf","say":["was-sind-sie-von-beruf","was-machen-sie"],"partner":["beruf","studium"],"accept":["ich-bin-student","ich-bin-schueler","ich-bin-lehrer","ich-bin-arzt","ich-studiere-medizin","ich-studiere-biologie","ich-studiere-wirtschaft","ich-studiere-jura","ich-studiere-chemie","ich-studiere-englisch","ich-studiere-franzoesisch","ich-werde-apotheker","ich-bin-mitarbeiter-bei-einer-autofirma","ich-arbeite-bei-einer-autofirma"],"typed":"beruf"},{"slot":"muttersprache","say":["was-ist-ihre-muttersprache"],"accept":["meine-muttersprache-ist-arabisch"],"typed":"muttersprache","partner":["muttersprache","sprachen"]},{"slot":"hobby","say":["was-ist-ihr-hobby"],"accept":["mein-hobby-ist-auto-fahren","mein-hobby-ist-muay-thai-machen","mein-hobby-ist","meine-hobbys-sind-schwimmen-malen-und-reisen","meine-hobbys-sind"],"typed":"hobby","partner":["hobby"]}],"ask_partner":[{"hint_ar":"اسأل الشريك: من أين هو؟","accept":["woher-kommen-sie","woher-kommst-du"],"partner":["land"]},{"hint_ar":"اسأل الشريك: أين يسكن؟","accept":["wo-wohnen-sie","wo-wohnst-du"],"partner":["stadt"]},{"hint_ar":"اسأل الشريك عن عمره","accept":["wie-alt-sind-sie"],"partner":["alter"]},{"hint_ar":"اسأل الشريك عن مهنته","accept":["was-sind-sie-von-beruf","was-machen-sie"],"partner":["beruf","studium"]},{"hint_ar":"اسأل الشريك عن لغته الأم","accept":["was-ist-ihre-muttersprache"],"partner":["muttersprache"]},{"hint_ar":"اسأل الشريك: ما هي اللغات التي يتكلمها؟","accept":["welche-sprachen-sprechen-sie"],"partner":["muttersprache","sprachen","deutsch"]},{"hint_ar":"اسأل الشريك عن هوايته","accept":["was-ist-ihr-hobby","was-sind-ihre-hobbys"],"partner":["hobby"]},{"hint_ar":"اسأل الشريك كيف حاله","accept":["wie-geht-es-dir","wie-geht-es-ihnen"],"reply":"mir-geht-es-gut-danke"},{"hint_ar":"اسأل الشريك عن عطلة نهاية أسبوعه","accept":["wie-war-ihr-wochenende","wie-war-dein-wochenende"],"partner":["wochenende"]},{"hint_ar":"اسأل الشريك: هل يتكلم الإسبانية؟","accept":["sprechen-sie-spanisch"],"reply":"nein-leider-nicht"}],"goodbye":"auf-wiedersehen","ai_proxy":""};
   const TALK_CAP = 3.2, TALK_MARGIN = 0.02;   // calibrated on 2 unseen voices (scratchpad/talk_calib.py)
   const talk = $("#talk"), talkLog = $("#talk-log"), talkScroll = $("#talk-scroll"), talkInput = $("#talk-input");
   const talkStatus = (text) => { $("#talk-status").innerHTML = text || ""; };
@@ -2542,16 +2542,22 @@ html:not(.js) .topic-test { display: none; }
   const AI_KEY = "wortschatz-ai-key", AI_MODELS = "wortschatz-ai-models", AI_MEMORY = "wortschatz-ai-memory",
     AI_ASKED = "wortschatz-ai-asked", AI_OPENINGS = "wortschatz-ai-openings", AI_SUMMARIES = "wortschatz-ai-summaries";
   const AI_BASE = "https://generativelanguage.googleapis.com/v1beta";
+  const AI_DAY = "wortschatz-ai-day", SHARED_PER_DAY = 60;   // messages per phone per day on the shared helper
   const aiKey = () => (store.get(AI_KEY) || "").trim();
+  // The owner's helper (Cloudflare) keeps one key secret, so visitors need no key of their own.
+  const AI_PROXY = ((TALK && TALK.ai_proxy) || "").replace(/\/+$/, "");
+  const aiShared = () => !aiKey() && !!AI_PROXY;
+  const aiReady = () => !!aiKey() || !!AI_PROXY;
   const aiModal = $("#ai-modal");
   const ONE_FACT = ["name", "familienname", "land", "stadt", "alter", "beruf"];
   let aiTtsOff = false;
   const ttsCache = new Map();
 
   async function aiFetch(path, body) {
-    const res = await fetch(`${AI_BASE}/${path}`, {
+    const own = aiKey();
+    const res = await fetch(`${own ? AI_BASE : AI_PROXY}/${path}`, {
       method: body ? "POST" : "GET",
-      headers: { "content-type": "application/json", "x-goog-api-key": aiKey() },
+      headers: own ? { "content-type": "application/json", "x-goog-api-key": own } : { "content-type": "application/json" },
       body: body ? JSON.stringify(body) : undefined
     });
     const data = await res.json().catch(() => ({}));
@@ -2609,9 +2615,11 @@ The learner speaks Arabic, comes from Morocco and learns German at level A1 in a
 ABOUT YOU (stay consistent): Ich heiße Lena. Ich bin dreiundzwanzig Jahre alt. Ich komme aus Deutschland. Ich wohne in Stuttgart. Ich bin Studentin, ich studiere Medizin. Meine Muttersprache ist Deutsch. Ich lerne jetzt Arabisch. Mein Hobby ist Musik hören, und ich reise gern. You may invent small new details about your life, but never contradict these.
 
 HOW TO TALK
-- Talk like a friend: react to what the learner said (interest, a short comment, something about yourself), then ask ONE new question. 1 to 3 short sentences, at most about 20 words.
-- Invent your own questions from the conversation and from the lessons. Never ask a question that was already asked in this conversation or that is in RECENTLY ASKED. Change topics often: family, work and studies, countries and languages, cities, hobbies, the weekend, days and months, seasons and weather, numbers and age, school. Often use the LATEST LESSON.
-- A1 German only: present tense, and "war" for the past. Use words from the LESSONS as much as possible. Every word you use that is NOT in the lessons goes into new_words with its Arabic meaning.
+- Talk like a friend in a real conversation: react to what the learner just said (interest, a short comment, something about yourself), then ask ONE question. 1 to 3 short sentences, at most about 20 words.
+- FOLLOW THE CONVERSATION: your question must grow out of the learner's last answer (a follow-up about what they just told you). Only when a topic is finished (after 2 or 3 exchanges) move to a new one, with a natural bridge ("Und …?"). Think like a person, not like a list of questions.
+- NEVER repeat a question: not one from this conversation, not one in RECENTLY ASKED, and never ask what you already know (see WHAT YOU REMEMBER); instead you may mention it ("Du wohnst in Kenitra, oder?" at most once).
+- ONLY THE LEARNER'S WORDS: use only German words that appear in the LESSONS (any form of them, e.g. "wohnst" from "wohnen", "Brüder" from "Bruder") plus names and places the learner told you. No other German word at all, not even small words that are not in the lessons. If you cannot say something with these words, say something simpler. "new_words" must stay empty.
+- Grammar: present tense, and "war" for the past (both are in the lessons).
 - Use what you remember about the learner (name, city, family, hobbies, earlier talks) naturally, like a friend who remembers.
 - Use "du" (you are friends). If the learner uses "Sie", you may answer with "Sie".
 
@@ -2624,6 +2632,7 @@ CORRECTIONS
 SPECIAL MESSAGES
 - "[START]": begin the conversation. Greet in a different way than in RECENT OPENINGS, use the learner's name if you know it, maybe mention something you remember, and ask a first question.
 - "[END]": say goodbye in one short sentence (for example "Auf Wiedersehen!") and write "summary_ar": 1 or 2 Arabic sentences about what you talked about and one tip.
+- "[REWRITE] …": your last answer broke a rule (the note says which). Answer again with the full JSON: the same reaction, but fixed as the note says.
 
 ANSWER ONLY WITH THIS JSON:
 {"heard": string, "correction": null or {"wrong": string, "right": string, "tip_ar": string}, "reply_de": string, "reply_ar": string,
@@ -2643,6 +2652,38 @@ EARLIER CONVERSATIONS: ${summaries.length ? summaries.join(" / ") : "none"}
 RECENTLY ASKED (do not repeat): ${loadJSON(AI_ASKED, []).join(" | ") || "-"}
 RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}`;
   }
+
+  // Words the learner has studied (every form on the page, reduced to a simple stem), to check Lena's German.
+  const stemOf = (w) => {
+    const t = simplify(w).replace(/[^a-z]/g, "");
+    return t.length > 4 ? t.replace(/(en|er|es|em|st|et|e|n|s|t)$/, "") : t;
+  };
+  let aiWords = null;
+  function lessonWords() {
+    if (aiWords) return aiWords;
+    aiWords = new Set();
+    document.querySelectorAll(".word").forEach((li) => {
+      const text = [li.dataset.say, li.querySelector(".lemma").textContent,
+        ...[...li.querySelectorAll(".de .sub, .parts .part b, .de > .art")].map((x) => x.textContent)].join(" ");
+      for (const w of text.split(/[^A-Za-zÄÖÜäöüß]+/)) if (w) { aiWords.add(simplify(w)); aiWords.add(stemOf(w)); }
+    });
+    return aiWords;
+  }
+  // German words in Lena's answer that the learner never studied (names the learner said are allowed).
+  function strangeWords(text, my, extra = []) {
+    const known = lessonWords();
+    const said = new Set(my.history.filter((h) => h.role === "user").flatMap((h) => h.parts.map((p) => p.text || ""))
+      .concat(loadJSON(AI_MEMORY, []).map((f) => f.de), extra, ["Lena oh ah aha hm hmm"]).join(" ").split(/[^A-Za-zÄÖÜäöüß]+/).map(simplify));
+    const out = [];
+    for (const w of String(text).split(/[^A-Za-zÄÖÜäöüß]+/)) {
+      if (!w || w.length < 2) continue;
+      const s = simplify(w);
+      if (known.has(s) || known.has(stemOf(w)) || said.has(s)) continue;
+      if (!out.includes(w)) out.push(w);
+    }
+    return out;
+  }
+  const questionKey = (q) => simplify(q).replace(/(du|sie|dein|deine|ihr|ihre)/g, "").replace(/\s+/g, " ").trim();
 
   function parseAI(text) {
     let s = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
@@ -2715,7 +2756,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
           let buf = ttsCache.get(text);
           if (!buf) {
             const data = await aiFetch(`models/${models.tts}:generateContent`, {
-              contents: [{ parts: [{ text: `Say in a warm, friendly, clear voice, at a calm speed for a learner: ${text}` }] }],
+              contents: [{ parts: [{ text }] }],
               generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
             });
             const part = ((((data.candidates || [])[0] || {}).content || {}).parts || []).find((p) => p.inlineData && p.inlineData.data);
@@ -2761,7 +2802,10 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       store.set(AI_MEMORY, JSON.stringify(facts.slice(-30)));
       my.learned.push(...r.remember);
     }
-    if (r.question) store.set(AI_ASKED, JSON.stringify([r.question, ...loadJSON(AI_ASKED, []).filter((q) => q !== r.question)].slice(0, 40)));
+    if (r.question) {
+      my.asked.push(r.question);
+      store.set(AI_ASKED, JSON.stringify([r.question, ...loadJSON(AI_ASKED, []).filter((q) => q !== r.question)].slice(0, 40)));
+    }
   }
   function aiProblem(err) {
     const my = chat;
@@ -2770,6 +2814,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
     let html;
     if (!err.status) html = `لا يوجد اتصال بالإنترنت الآن. ${offline}`;
     else if ((err.status === 400 && /api key|API_KEY/i.test(err.message)) || err.status === 401 || err.status === 403) html = `المفتاح لا يعمل. تأكد منه في الإعدادات. ${keyBtn}`;
+    else if (err.status === 503 && aiShared()) html = `لينا غير جاهزة بعد. ${offline}`;
     else if (err.status === 429) html = `وصلت إلى الحد المجاني لهذه اللحظة. انتظر دقيقة وحاول مرة أخرى، أو ${offline}`;
     else html = `حدث خطأ (${esc(err.status)}). حاول مرة أخرى. ${offline}`;
     coach(html, "bad");
@@ -2778,6 +2823,16 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
   async function aiTurn(message, audio, meBubble) {
     const my = chat;
     if (!my || !my.ai || my.busy) return;
+    if (aiShared() && message !== "[END]") {
+      const today = new Date().toDateString(), day = loadJSON(AI_DAY, {});
+      const used = day.date === today ? day.n || 0 : 0;
+      if (used >= SHARED_PER_DAY) {
+        if (meBubble) meBubble.remove();
+        coach(`تكلّمت كثيرًا مع لينا اليوم 🙂 عد غدًا، أو <button class="btn" type="button" data-talk="offline" lang="ar">تكلّم بدون إنترنت</button>`, "bad");
+        return;
+      }
+      store.set(AI_DAY, JSON.stringify({ date: today, n: used + 1 }));
+    }
     my.busy = true;
     setComposer(false);
     talkStatus("");
@@ -2786,8 +2841,23 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       ? [{ text: "The learner answered by voice (attached audio). Write what you heard in \"heard\"." }, { inlineData: { mimeType: "audio/wav", data: audio } }]
       : [{ text: message }];
     let r;
+    const contents = [...my.history, { role: "user", parts }];
     try {
-      r = await aiAsk([...my.history, { role: "user", parts }]);
+      r = await aiAsk(contents);
+      // The page checks the answer: only lesson words, no question asked before. If not, Lena rewrites it once.
+      const problems = [];
+      const strange = strangeWords(r.reply_de, my, [message || "", r.heard]);   // names the learner just said are fine
+      if (strange.length) problems.push(`These words are not in the learner's lessons: ${strange.join(", ")}. Say it with lesson words only.`);
+      const asked = [...my.asked, ...loadJSON(AI_ASKED, [])].map(questionKey);
+      if (r.question && asked.includes(questionKey(r.question))) problems.push(`You already asked "${r.question}". Ask something new that follows from what the learner just said.`);
+      if (problems.length && message !== "[END]") {
+        const again = await aiAsk([...contents, { role: "model", parts: [{ text: JSON.stringify(r) }] },
+          { role: "user", parts: [{ text: `[REWRITE] ${problems.join(" ")}` }] }]).catch(() => null);
+        if (again && again.reply_de && again.reply_de !== "…") {
+          Object.assign(r, { reply_de: again.reply_de, reply_ar: again.reply_ar || r.reply_ar, question: again.question,
+            new_words: again.new_words, help_ar: r.help_ar || again.help_ar });
+        }
+      }
     } catch (err) {
       typing.remove();
       if (chat === my) aiProblem(err);
@@ -2842,11 +2912,11 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
     renderTalkModes();
   }
   function startAI() {
-    if (!aiKey()) { openAiKey(); return; }
+    if (!aiReady()) { openAiKey(); return; }
     unlockAudio();
     stopAll();
     if (!navigator.onLine) { toast(AR("لا يوجد إنترنت الآن: سأتكلم معك بدون إنترنت.")); startTalk(); return; }
-    chat = { ai: true, all: examEntries(), history: [], busy: false, learned: [], fixes: [] };
+    chat = { ai: true, all: examEntries(), history: [], busy: false, learned: [], fixes: [], asked: [] };
     talkLog.innerHTML = "";
     talkStatus("");
     talkInput.value = "";
@@ -2952,12 +3022,12 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
     const offline = `
       <button class="test-mode talk-start" type="button" data-talk-start>
         <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${chatIcon}</svg>
-        <span class="tm-de">${aiKey() ? "Ohne Internet" : "Gespräch beginnen"}</span>
-        <span class="tm-ar" lang="ar" dir="rtl">${aiKey() ? "بدون إنترنت" : "ابدأ المحادثة"}</span>
+        <span class="tm-de">${aiReady() ? "Ohne Internet" : "Gespräch beginnen"}</span>
+        <span class="tm-ar" lang="ar" dir="rtl">${aiReady() ? "بدون إنترنت" : "ابدأ المحادثة"}</span>
         <span class="tm-desc">Partner mit Sätzen aus deinen Lektionen · <span lang="ar">شريك بجمل من دروسك، يعمل بدون إنترنت</span></span>
-        <span class="tm-last">${aiKey() ? "" : remembers}</span>
+        <span class="tm-last">${aiReady() ? "" : remembers}</span>
       </button>`;
-    const ai = aiKey() ? `
+    const ai = aiReady() ? `
       <button class="test-mode talk-start talk-ai" type="button" data-ai-start>
         <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${robot}</svg>
         <span class="tm-de">Mit Lena sprechen</span>
@@ -2971,7 +3041,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
         <span class="tm-ar" lang="ar" dir="rtl">اجعل الشريك ذكيًا 🤖</span>
         <span class="tm-desc">Mit einem kostenlosen Google-Schlüssel · <span lang="ar">بمفتاح مجاني من Google: تخترع أسئلة جديدة وتفهم صوتك</span></span>
       </button>`;
-    box.innerHTML = `${aiKey() ? ai + offline : offline + ai}
+    box.innerHTML = `${aiReady() ? ai + offline : offline + ai}
       <div class="talk-links">
         ${aiKey() ? '<button class="talk-forget" type="button" data-ai-key lang="ar">🔑 مفتاح Gemini</button>' : ""}
         ${knows ? '<button class="talk-forget" type="button" data-talk-forget lang="ar">انسَ معلوماتي</button>' : ""}
@@ -3045,7 +3115,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
   talk.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeTalk(); });
   renderTalkModes();
 
-  window.__talk = { startTalk, startAI, makeTurns, checkTypedTalk, checkTalk, dtwOpen, readFact, profileLines, aiPrompt, parseAI, aiPickModels, get chat() { return chat; } };
+  window.__talk = { startTalk, startAI, strangeWords, lessonWords, makeTurns, checkTypedTalk, checkTalk, dtwOpen, readFact, profileLines, aiPrompt, parseAI, aiPickModels, get chat() { return chat; } };
 
   window.__speech = { features, dtw, checkWord, checkAmong, to16k, cropSpeech };
   window.__exam = { startExam, gradeWrite, makeQuestion, examEntries, get run() { return run; } };
