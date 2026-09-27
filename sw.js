@@ -1,5 +1,5 @@
 // Offline support: the page, icons and fonts are kept on the phone after the first visit.
-const CACHE = "german-words-8dd76461b96e";
+const CACHE = "german-words-88e46b65bb1a";
 const CORE = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", (event) => {
@@ -25,15 +25,19 @@ self.addEventListener("fetch", (event) => {
   if (/\.(mp4|pdf)$/.test(url.pathname)) return;
 
   if (request.mode === "navigate") {
-    // Newest words when online; the saved copy when offline or the network is slow.
+    // Newest words when online; the saved copy when offline or the network is very slow. The download always
+    // finishes in the background and is saved, so a slow phone still gets the new lesson on the next visit.
+    const network = fetch(request).then((response) => {
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE).then((cache) => cache.put("index.html", copy));
+      }
+      return response;
+    });
+    event.waitUntil(network.catch(() => {}));
     event.respondWith(
-      Promise.race([fetch(request), timeout(4000)])
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(CACHE).then((cache) => cache.put("index.html", copy));
-          return response;
-        })
-        .catch(() => caches.match("index.html").then((hit) => hit || fetch(request)))
+      Promise.race([network, timeout(12000)])
+        .catch(() => caches.match("index.html").then((hit) => hit || network))
     );
     return;
   }

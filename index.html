@@ -492,6 +492,20 @@ html:not(.js) .topic-test { display: none; }
 .talk-modes { display: grid; gap: 8px; padding: 14px 18px 18px; }
 .talk-start { width: 100%; }
 @media (min-width: 481px) { .talk-start { grid-template-columns: 30px minmax(0, 1fr); column-gap: 12px; } .talk-start svg { grid-row: 1 / span 4; margin: 2px 0 0; } .talk-start > span { grid-column: 2; } }
+.talk-links { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 14px; }
+.talk-ai { border-color: var(--gold); background: var(--gold-soft); }
+.talk-under-actions { display: flex; gap: 10px; flex: none; }
+.bubble.typing { padding: 12px 16px; }
+.talk-dots { display: inline-flex; gap: 5px; align-items: center; }
+.talk-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: dot 1s ease-in-out infinite; }
+.talk-dots i:nth-child(2) { animation-delay: .15s; }
+.talk-dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes dot { 50% { transform: translateY(-4px); opacity: .5; } }
+.bubble.fix { align-self: flex-start; display: grid; gap: 4px; background: var(--bad-bg); border: 1px solid var(--bad); border-bottom-left-radius: 6px; }
+.bubble.fix s { color: var(--bad); }
+.talk-new { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.talk-new > span { font-size: .85rem; padding: 2px 8px; border-radius: 999px; border: 1px dashed var(--gold); color: var(--ink); }
+#ai-key { width: 100%; font-size: 1rem; }
 .talk-forget { justify-self: end; cursor: pointer; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: .88rem; text-decoration: underline; padding: 2px 4px; }
 .talk-bar { flex: none; border-top: 1px solid var(--line); background: var(--paper); padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px)); }
 .talk-bar[hidden] { display: none !important; }
@@ -597,9 +611,9 @@ html:not(.js) .topic-test { display: none; }
       </div></div>
     </section>
     <section class="topic topic-test topic-talk" id="t-talk" data-topic="talk">
-      <h2 class="topic-title"><button class="topic-toggle" type="button" aria-expanded="false" aria-controls="tb-talk"><span class="t-de">Gespräch</span><span class="t-ar" lang="ar" dir="rtl">محادثة</span><span class="t-meta">Partner · Sprechen oder schreiben</span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h2>
+      <h2 class="topic-title"><button class="topic-toggle" type="button" aria-expanded="false" aria-controls="tb-talk"><span class="t-de">Gespräch</span><span class="t-ar" lang="ar" dir="rtl">محادثة</span><span class="t-meta">Lena (KI) · Partner · Sprechen oder schreiben</span><svg class="chev" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></h2>
       <div class="topic-body" id="tb-talk"><div class="topic-inner">
-        <p class="test-intro">Sprich mit dem Partner. <span lang="ar" dir="rtl">تكلّم مع الشريك بالألمانية: بالميكروفون أو بالكتابة، بدون إنترنت.</span></p>
+        <p class="test-intro">Sprich mit Lena oder dem Partner. <span lang="ar" dir="rtl">تكلّم بالألمانية بالميكروفون أو بالكتابة: لينا ذكية وتحتاج إنترنت، والشريك يعمل بدون إنترنت.</span></p>
         <div class="talk-modes" id="talk-modes"></div>
       </div></div>
     </section>
@@ -646,7 +660,33 @@ html:not(.js) .topic-test { display: none; }
     </form>
     <div class="talk-under">
       <p class="talk-status" id="talk-status" role="status" lang="ar" dir="rtl"></p>
-      <button class="talk-skip" type="button" data-talk="skip" lang="ar">لا أعرف</button>
+      <span class="talk-under-actions">
+        <button class="talk-skip" type="button" data-talk="skip" lang="ar">لا أعرف</button>
+        <button class="talk-skip" type="button" data-talk="end" lang="ar">إنهاء 👋</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="ai-modal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ai-title">
+    <div class="sheet-icon"><svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <h3 id="ai-title">KI-Partnerin Lena<span class="ar-sub" lang="ar" dir="rtl">اجعل الشريك ذكيًا</span></h3>
+    <div class="sheet-body">
+      <p lang="ar" dir="rtl">لينا تخترع أسئلة جديدة من دروسك، تفهم صوتك (حتى اسمك)، تصحّح أخطاءك وتتذكرك. تحتاج مفتاحًا مجانيًا من Google، مرة واحدة فقط:</p>
+      <ol lang="ar" dir="rtl">
+        <li>افتح <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" dir="ltr">aistudio.google.com/apikey</a> وسجّل الدخول بحساب Gmail.</li>
+        <li>اضغط <b dir="ltr">Create API key</b> ثم <b dir="ltr">Copy</b>.</li>
+        <li>ارجع هنا، الصق المفتاح في الخانة، واضغط «حفظ».</li>
+      </ol>
+      <input id="ai-key" class="file-url" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" dir="ltr" aria-label="Gemini API key">
+      <p class="de-note" lang="ar" dir="rtl">المفتاح يبقى في هذا الهاتف فقط ولا يُنشر. كلامك مع لينا يُرسل إلى Google لتفهمه، فلا تكتب أسرارًا. مجاني في حدود يومية.</p>
+      <p id="ai-status" role="status"></p>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn" type="button" id="ai-remove" hidden>حذف المفتاح</button>
+      <button class="btn" type="button" id="ai-cancel">إغلاق</button>
+      <button class="btn primary" type="button" id="ai-save">حفظ</button>
     </div>
   </div>
 </div>
@@ -808,9 +848,11 @@ html:not(.js) .topic-test { display: none; }
 
   let runId = 0;
   let runningBtn = null;
+  let bufferSource = null;   // Lena's voice (Web Audio)
   function stopAll() {
     runId++;
     player.pause();
+    if (bufferSource) { try { bufferSource.stop(); } catch (e) {} bufferSource = null; }
     if (synth) synth.cancel();
     if (finish) { finish(true); finish = null; }
     document.querySelectorAll(".speaking").forEach((el) => el.classList.remove("speaking"));
@@ -1092,7 +1134,7 @@ html:not(.js) .topic-test { display: none; }
     if (document.hidden) { if (stopRecording) stopRecording(); releaseMic(); }
   });
 
-  async function recordVoice(stream) {
+  async function recordVoice(stream, opts = {}) {
     const ctx = unlockAudio();
     if (ctx.state !== "running") await ctx.resume().catch(() => {});
     const sr = ctx.sampleRate;
@@ -1126,7 +1168,7 @@ html:not(.js) .topic-test { display: none; }
         if (db > -50 && db > floor + 12) { heard = true; quiet = 0; }
         else if (heard) quiet += data.length / sr;
         const secs = total / sr;
-        if ((heard && quiet > 0.9) || secs > 5 || (!heard && secs > 4)) finish();
+        if ((heard && quiet > (opts.quiet || 0.9)) || secs > (opts.max || 5) || (!heard && secs > (opts.wait || 4))) finish();
       };
       source.connect(node);
       node.connect(ctx.destination);
@@ -2494,27 +2536,453 @@ html:not(.js) .topic-test { display: none; }
       `🎤 <span lang="de" dir="ltr">${heard ? esc(heard.bare === r.id ? heard.de : fullOf(heard)) : "…"}</span>`, null);
   }
 
+  // ---- KI-Partnerin Lena: a real AI (Google Gemini, with the learner's own free key, kept on this device) that
+  // invents its questions from the lessons, understands speech and typing, corrects gently and remembers the
+  // learner. Needs internet; without it the offline partner above is used.
+  const AI_KEY = "wortschatz-ai-key", AI_MODELS = "wortschatz-ai-models", AI_MEMORY = "wortschatz-ai-memory",
+    AI_ASKED = "wortschatz-ai-asked", AI_OPENINGS = "wortschatz-ai-openings", AI_SUMMARIES = "wortschatz-ai-summaries";
+  const AI_BASE = "https://generativelanguage.googleapis.com/v1beta";
+  const aiKey = () => (store.get(AI_KEY) || "").trim();
+  const aiModal = $("#ai-modal");
+  const ONE_FACT = ["name", "familienname", "land", "stadt", "alter", "beruf"];
+  let aiTtsOff = false;
+  const ttsCache = new Map();
+
+  async function aiFetch(path, body) {
+    const res = await fetch(`${AI_BASE}/${path}`, {
+      method: body ? "POST" : "GET",
+      headers: { "content-type": "application/json", "x-goog-api-key": aiKey() },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const err = new Error((data.error && data.error.message) || res.statusText || "error");
+      err.status = res.status;
+      throw err;
+    }
+    return data;
+  }
+  // Which Gemini models this key can use (names change over time, so they are looked up, not written in).
+  async function aiPickModels() {
+    const names = [];
+    let token = "";
+    for (let page = 0; page < 5; page++) {
+      const data = await aiFetch(`models?pageSize=200${token ? "&pageToken=" + encodeURIComponent(token) : ""}`);
+      for (const m of data.models || []) {
+        if ((m.supportedGenerationMethods || []).includes("generateContent")) names.push(String(m.name).replace(/^models\//, ""));
+      }
+      if (!data.nextPageToken) break;
+      token = data.nextPageToken;
+    }
+    const version = (n) => { const m = /(\d+(?:\.\d+)?)/.exec(n); return m ? parseFloat(m[1]) : 0; };
+    const plain = (n) => !/(tts|live|image|audio|embed|vision|robotic|computer|learnlm|gemma|aqa|nano|veo|imagen|thinking)/i.test(n);
+    const rank = (a, b) => (/preview|exp/i.test(a) - /preview|exp/i.test(b)) || version(b) - version(a) || a.length - b.length;
+    const flash = names.filter((n) => /flash/i.test(n) && !/lite/i.test(n) && plain(n)).sort(rank);
+    const lite = names.filter((n) => /flash-lite/i.test(n) && plain(n)).sort(rank);
+    const tts = names.filter((n) => /tts/i.test(n)).sort((a, b) => (/lite/i.test(b) - /lite/i.test(a)) || rank(a, b));
+    const models = { chat: flash[0] || lite[0] || "gemini-flash-latest", lite: lite[0] || "", tts: tts[0] || "", t: Date.now() };
+    store.set(AI_MODELS, JSON.stringify(models));
+    return models;
+  }
+  async function aiModels() {
+    const m = loadJSON(AI_MODELS, null);
+    return m && m.chat && Date.now() - m.t < 7 * 864e5 ? m : aiPickModels();
+  }
+
+  // ---- what Lena knows: the lessons, the learner, earlier conversations
+  function aiPrompt(all) {
+    const bySection = new Map();
+    for (const x of all) {
+      if (x.kind === "Buchstabe") continue;
+      if (!bySection.has(x.topicDe)) bySection.set(x.topicDe, []);
+      bySection.get(x.topicDe).push(fullOf(x));
+    }
+    const lessons = [...bySection].map(([t, words]) => `- ${t}: ${words.join(" | ")}`).join("\n");
+    const date = ($(".stats time") || {}).textContent || "";
+    const latest = all.filter((x) => x.fresh).map(fullOf).join(" | ");
+    const facts = [...profileLines(loadJSON(MEMORY_KEY, {})).map(([, de]) => de.replace(/^Sie heißen/, "Du heißt")),
+      ...loadJSON(AI_MEMORY, []).map((f) => f.de)];
+    const summaries = loadJSON(AI_SUMMARIES, []).map((s) => `${s.date}: ${s.ar}`);
+    return `You are Lena, a friendly German conversation partner in a chat app: a real person and a friend, not a teacher and not a quiz.
+The learner speaks Arabic, comes from Morocco and learns German at level A1 in a class. The app shows your German with an Arabic translation.
+
+ABOUT YOU (stay consistent): Ich heiße Lena. Ich bin dreiundzwanzig Jahre alt. Ich komme aus Deutschland. Ich wohne in Stuttgart. Ich bin Studentin, ich studiere Medizin. Meine Muttersprache ist Deutsch. Ich lerne jetzt Arabisch. Mein Hobby ist Musik hören, und ich reise gern. You may invent small new details about your life, but never contradict these.
+
+HOW TO TALK
+- Talk like a friend: react to what the learner said (interest, a short comment, something about yourself), then ask ONE new question. 1 to 3 short sentences, at most about 20 words.
+- Invent your own questions from the conversation and from the lessons. Never ask a question that was already asked in this conversation or that is in RECENTLY ASKED. Change topics often: family, work and studies, countries and languages, cities, hobbies, the weekend, days and months, seasons and weather, numbers and age, school. Often use the LATEST LESSON.
+- A1 German only: present tense, and "war" for the past. Use words from the LESSONS as much as possible. Every word you use that is NOT in the lessons goes into new_words with its Arabic meaning.
+- Use what you remember about the learner (name, city, family, hobbies, earlier talks) naturally, like a friend who remembers.
+- Use "du" (you are friends). If the learner uses "Sie", you may answer with "Sie".
+
+CORRECTIONS
+- If the learner's German has a real mistake (verb ending, word order, wrong word, wrong article, wrong preposition like "aus der Türkei"), fill "correction": the wrong part, the whole corrected sentence, and a very short tip in Arabic. Ignore capital letters, punctuation, umlauts written as a/o/u or ae/oe/ue, small typos, and a missing der/die/das on its own. If there is no mistake, "correction" is null.
+- If the learner writes Arabic, French or English, still answer in simple German and put in "help_ar" how to say it in German.
+- "[HELP]" means the learner does not know how to answer your last question: in "help_ar" give a short Arabic explanation and one easy German example answer, and in reply_de ask the same question again in a simpler way.
+- If audio is attached, first write in "heard" exactly what the learner said (German as spoken, your best guess). If you could not understand it, say so kindly in German and ask them to say it again.
+
+SPECIAL MESSAGES
+- "[START]": begin the conversation. Greet in a different way than in RECENT OPENINGS, use the learner's name if you know it, maybe mention something you remember, and ask a first question.
+- "[END]": say goodbye in one short sentence (for example "Auf Wiedersehen!") and write "summary_ar": 1 or 2 Arabic sentences about what you talked about and one tip.
+
+ANSWER ONLY WITH THIS JSON:
+{"heard": string, "correction": null or {"wrong": string, "right": string, "tip_ar": string}, "reply_de": string, "reply_ar": string,
+"help_ar": string, "new_words": [{"de": string, "ar": string}], "remember": [{"key": string, "de": string, "ar": string}],
+"question": string, "summary_ar": string}
+- "remember": only NEW facts about the learner from this message. key is one of name, familienname, land, stadt, alter, beruf, familie, hobby, sprachen, wochenende, other. "de" is one short German sentence in du-form, e.g. "Du wohnst in Kenitra.". "ar" is its Arabic translation.
+- "question": the question you asked in reply_de (copied), or "".
+- "heard": for typed messages copy the learner's text.
+
+LESSONS (what the learner has studied, by section):
+${lessons}
+
+LATEST LESSON (${date}): ${latest || "-"}
+
+WHAT YOU REMEMBER ABOUT THE LEARNER: ${facts.length ? facts.join(" ") : "nothing yet (this is your first conversation: ask their name early)"}
+EARLIER CONVERSATIONS: ${summaries.length ? summaries.join(" / ") : "none"}
+RECENTLY ASKED (do not repeat): ${loadJSON(AI_ASKED, []).join(" | ") || "-"}
+RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}`;
+  }
+
+  function parseAI(text) {
+    let s = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
+    const a = s.indexOf("{"), b = s.lastIndexOf("}");
+    if (a >= 0 && b > a) s = s.slice(a, b + 1);
+    let r;
+    try { r = JSON.parse(s); } catch (e) { r = { reply_de: String(text || "").trim() }; }
+    const str = (v) => (typeof v === "string" ? v.trim() : "");
+    const c = r.correction && typeof r.correction === "object" && str(r.correction.right) ? r.correction : null;
+    return {
+      heard: str(r.heard), reply_de: str(r.reply_de) || "…", reply_ar: str(r.reply_ar), help_ar: str(r.help_ar),
+      correction: c ? { wrong: str(c.wrong), right: str(c.right), tip_ar: str(c.tip_ar) } : null,
+      new_words: Array.isArray(r.new_words) ? r.new_words.filter((w) => w && str(w.de)).slice(0, 4) : [],
+      remember: Array.isArray(r.remember) ? r.remember.filter((f) => f && str(f.de)).slice(0, 4) : [],
+      question: str(r.question), summary_ar: str(r.summary_ar)
+    };
+  }
+  async function aiAsk(contents) {
+    let models = await aiModels(), last = null;
+    const body = { systemInstruction: { parts: [{ text: aiPrompt(chat.all) }] }, contents,
+      generationConfig: { responseMimeType: "application/json", temperature: 1 } };
+    for (let round = 0; round < 2; round++) {
+      for (const model of [models.chat, models.lite].filter(Boolean)) {
+        try {
+          const data = await aiFetch(`models/${model}:generateContent`, body);
+          const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
+          return parseAI(parts.filter((p) => p.text && !p.thought).map((p) => p.text).join(""));
+        } catch (err) {
+          last = err;
+          if (![404, 429, 500, 503].includes(err.status)) throw err;   // busy or model gone: try the next one
+        }
+      }
+      if (last && last.status === 404 && round === 0) models = await aiPickModels(); else break;
+    }
+    throw last;
+  }
+
+  // ---- Lena's voice: a sentence recorded on the page, else Google's natural voice, else the phone's German voice
+  async function pcmToBuffer(inline) {
+    const bin = atob(inline.data), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const ctx = unlockAudio();
+    if (bin.slice(0, 4) === "RIFF") return ctx.decodeAudioData(bytes.buffer.slice(0));
+    const rate = Number((/rate=(\d+)/.exec(inline.mimeType || "") || [])[1]) || 24000;
+    const n = bytes.length >> 1, view = new DataView(bytes.buffer), buf = ctx.createBuffer(1, n, rate), ch = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) ch[i] = view.getInt16(i * 2, true) / 32768;
+    return buf;
+  }
+  function playBuffer(buf) {
+    return new Promise((resolve) => {
+      const ctx = unlockAudio(), src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.playbackRate.value = isSlow() ? 0.85 : 1;
+      src.connect(ctx.destination);
+      bufferSource = src;
+      src.onended = () => { if (bufferSource === src) bufferSource = null; resolve(true); };
+      src.start();
+    });
+  }
+  async function aiVoice(text, el) {
+    const my = chat;
+    stopAll();
+    if (el) el.classList.add("speaking");
+    try {
+      const recorded = my && my.all.find((x) => simplify(x.de) === simplify(text));
+      if (recorded) { await say(recorded.li); return; }
+      const models = await aiModels().catch(() => ({}));
+      if (models.tts && !aiTtsOff) {
+        try {
+          let buf = ttsCache.get(text);
+          if (!buf) {
+            const data = await aiFetch(`models/${models.tts}:generateContent`, {
+              contents: [{ parts: [{ text: `Say in a warm, friendly, clear voice, at a calm speed for a learner: ${text}` }] }],
+              generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
+            });
+            const part = ((((data.candidates || [])[0] || {}).content || {}).parts || []).find((p) => p.inlineData && p.inlineData.data);
+            if (!part) throw new Error("no audio");
+            buf = await pcmToBuffer(part.inlineData);
+            ttsCache.set(text, buf);
+          }
+          if (chat !== my) return;
+          await playBuffer(buf);
+          return;
+        } catch (err) {
+          if (err.status === 429 || err.status === 403 || err.status === 404) aiTtsOff = true;   // no natural voice for now
+        }
+      }
+      if (chat === my) await speakFallback(text);
+    } finally {
+      if (el) el.classList.remove("speaking");
+    }
+  }
+
+  // ---- the conversation with Lena
+  function aiLine(r) {
+    const words = r.new_words.length
+      ? `<span class="talk-new">${r.new_words.map((w) => `<span><b lang="de" dir="ltr">${esc(w.de)}</b> <span lang="ar" dir="rtl">${esc(w.ar || "")}</span></span>`).join("")}</span>`
+      : "";
+    return bubble("partner", `<button class="talk-play" type="button" data-talk="say" data-text="${esc(r.reply_de)}" aria-label="Anhören">${SPEAKER_ICON}</button>
+      <span class="talk-de" lang="de" dir="ltr">${esc(r.reply_de)}</span>
+      <span class="talk-ar" lang="ar" dir="rtl">${esc(r.reply_ar)}</span>${words}`);
+  }
+  function aiRemember(r, my) {
+    if (r.remember.length) {
+      let facts = loadJSON(AI_MEMORY, []);
+      for (const f of r.remember) {
+        const key = String(f.key || "other");
+        if (ONE_FACT.includes(key)) facts = facts.filter((x) => x.key !== key);
+        facts.push({ key, de: String(f.de).trim(), ar: String(f.ar || "").trim() });
+        if (key === "name") {   // the offline partner greets by name too
+          const m = /heißt\s+(.+?)[.!]*$/i.exec(f.de);
+          const me = loadJSON(MEMORY_KEY, {});
+          if (m && !me.name) { me.name = { v: cap(m[1]) }; store.set(MEMORY_KEY, JSON.stringify(me)); }
+        }
+      }
+      store.set(AI_MEMORY, JSON.stringify(facts.slice(-30)));
+      my.learned.push(...r.remember);
+    }
+    if (r.question) store.set(AI_ASKED, JSON.stringify([r.question, ...loadJSON(AI_ASKED, []).filter((q) => q !== r.question)].slice(0, 40)));
+  }
+  function aiProblem(err) {
+    const my = chat;
+    const offline = '<button class="btn" type="button" data-talk="offline" lang="ar">تكلّم بدون إنترنت</button>';
+    const keyBtn = '<button class="btn" type="button" data-talk="key" lang="ar">🔑 المفتاح</button>';
+    let html;
+    if (!err.status) html = `لا يوجد اتصال بالإنترنت الآن. ${offline}`;
+    else if ((err.status === 400 && /api key|API_KEY/i.test(err.message)) || err.status === 401 || err.status === 403) html = `المفتاح لا يعمل. تأكد منه في الإعدادات. ${keyBtn}`;
+    else if (err.status === 429) html = `وصلت إلى الحد المجاني لهذه اللحظة. انتظر دقيقة وحاول مرة أخرى، أو ${offline}`;
+    else html = `حدث خطأ (${esc(err.status)}). حاول مرة أخرى. ${offline}`;
+    coach(html, "bad");
+    if (my) { my.busy = false; setComposer(true); }
+  }
+  async function aiTurn(message, audio, meBubble) {
+    const my = chat;
+    if (!my || !my.ai || my.busy) return;
+    my.busy = true;
+    setComposer(false);
+    talkStatus("");
+    const typing = bubble("partner typing", '<span class="talk-dots" aria-label="Lena schreibt"><i></i><i></i><i></i></span>');
+    const parts = audio
+      ? [{ text: "The learner answered by voice (attached audio). Write what you heard in \"heard\"." }, { inlineData: { mimeType: "audio/wav", data: audio } }]
+      : [{ text: message }];
+    let r;
+    try {
+      r = await aiAsk([...my.history, { role: "user", parts }]);
+    } catch (err) {
+      typing.remove();
+      if (chat === my) aiProblem(err);
+      return;
+    }
+    typing.remove();
+    if (chat !== my) return;
+    if (audio && meBubble) meBubble.innerHTML = `🎤 <span lang="de" dir="auto">${esc(r.heard || "…")}</span>`;
+    const said = audio ? (r.heard || "(nicht verstanden)") : message;
+    my.history.push({ role: "user", parts: [{ text: said }] },
+      { role: "model", parts: [{ text: JSON.stringify({ reply_de: r.reply_de, question: r.question }) }] });
+    if (r.correction) {
+      my.fixes.push(r.correction);
+      bubble("fix", `<span lang="ar" dir="rtl">تصحيح لطيف:</span>
+        ${r.correction.wrong ? `<s lang="de" dir="ltr">${esc(r.correction.wrong)}</s>` : ""}
+        <button class="talk-model" type="button" data-talk="say" data-text="${esc(r.correction.right)}">${SPEAKER_ICON}<b lang="de" dir="ltr">${esc(r.correction.right)}</b>${r.correction.tip_ar ? `<span lang="ar" dir="rtl">${esc(r.correction.tip_ar)}</span>` : ""}</button>`);
+    } else if (meBubble && message !== "[START]" && message !== "[HELP]" && message !== "[END]") {
+      meBubble.classList.add("ok");
+    }
+    if (r.help_ar) coach(esc(r.help_ar));
+    aiRemember(r, my);
+    if (message === "[START]") store.set(AI_OPENINGS, JSON.stringify([r.reply_de, ...loadJSON(AI_OPENINGS, [])].slice(0, 6)));
+    const el = aiLine(r);
+    if (message === "[END]") {
+      if (r.summary_ar) {
+        const date = new Date().toLocaleDateString("de-DE");
+        store.set(AI_SUMMARIES, JSON.stringify([{ date, ar: r.summary_ar }, ...loadJSON(AI_SUMMARIES, [])].slice(0, 6)));
+      }
+      await aiVoice(r.reply_de, el);
+      if (chat === my) aiSummary(r);
+      return;
+    }
+    my.busy = false;
+    setComposer(true);
+    if (!window.matchMedia("(pointer: coarse)").matches) talkInput.focus({ preventScroll: true });
+    await aiVoice(r.reply_de, el);
+  }
+  function aiSummary(r) {
+    const my = chat;
+    $("#talk-bar").hidden = true;
+    const learned = my.learned.length
+      ? `<h3 lang="ar" dir="rtl">ما تعلّمته لينا عنك اليوم</h3><ul class="talk-profile">${my.learned.map((f) =>
+          `<li><b lang="de" dir="ltr">${esc(f.de)}</b><span lang="ar" dir="rtl">${esc(f.ar || "")}</span></li>`).join("")}</ul>` : "";
+    const fixes = my.fixes.length
+      ? `<h3 lang="ar" dir="rtl">تصحيحات من هذه المحادثة</h3><ul class="talk-tips">${my.fixes.map((c) =>
+          `<li lang="ar" dir="rtl">${c.wrong ? `<s lang="de" dir="ltr">${esc(c.wrong)}</s> ← ` : ""}<b lang="de" dir="ltr">${esc(c.right)}</b>${c.tip_ar ? " · " + esc(c.tip_ar) : ""}</li>`).join("")}</ul>`
+      : `<p lang="ar" dir="rtl">لا أخطاء في هذه المحادثة. ممتاز! 🎉</p>`;
+    bubble("summary", `${r.summary_ar ? `<p lang="ar" dir="rtl">${esc(r.summary_ar)}</p>` : ""}${learned}${fixes}
+      <div class="exam-actions"><button class="btn primary" type="button" data-talk="again" lang="ar">محادثة جديدة</button>
+      <button class="btn" type="button" data-talk="close" lang="ar">رجوع</button></div>`);
+    my.busy = false;
+    renderTalkModes();
+  }
+  function startAI() {
+    if (!aiKey()) { openAiKey(); return; }
+    unlockAudio();
+    stopAll();
+    if (!navigator.onLine) { toast(AR("لا يوجد إنترنت الآن: سأتكلم معك بدون إنترنت.")); startTalk(); return; }
+    chat = { ai: true, all: examEntries(), history: [], busy: false, learned: [], fixes: [] };
+    talkLog.innerHTML = "";
+    talkStatus("");
+    talkInput.value = "";
+    $("#talk-bar").hidden = false;
+    $("#talk-title").innerHTML = 'Lena <span lang="ar" dir="rtl">الشريكة الذكية</span>';
+    talk.classList.remove("closing");
+    talk.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    coach("تكلّم مع لينا بالألمانية 🎤 أو بالكتابة. تخترع أسئلة جديدة وتتذكرك. 🌐 تحتاج إنترنت.");
+    aiTurn("[START]");
+  }
+  async function aiMic(btn) {
+    if (stopRecording) { stopRecording(); return; }
+    const my = chat;
+    if (!my || my.busy) return;
+    unlockAudio();
+    stopAll();
+    if (PHONE_FILE) { showMicHelp("phone", null); return; }
+    const state = await micState();
+    if (state === "denied" || state === "unavailable") { showMicHelp(state, null); return; }
+    btn.classList.add("listening");
+    talkStatus("تكلّم الآن … اضغط مرة أخرى عند الانتهاء");
+    let rec;
+    try {
+      rec = await recordVoice(await getMic(), { max: 15, quiet: 1.6 });
+    } catch (err) {
+      btn.classList.remove("listening");
+      talkStatus("");
+      const name = err && err.name;
+      showMicHelp(name === "NotFoundError" || name === "NotReadableError" || name === "OverconstrainedError" ? "nomic"
+        : name === "NotAllowedError" || name === "SecurityError" ? (window.self !== window.top ? "embedded" : "denied") : "unavailable", null);
+      return;
+    }
+    btn.classList.remove("listening");
+    talkStatus("");
+    if (chat !== my) return;
+    if (!rec.heard) { talkStatus("لم أسمع شيئًا، حاول مرة أخرى."); return; }
+    const me = bubble("me", '🎤 <span class="talk-dots"><i></i><i></i><i></i></span>');
+    aiTurn(null, wavBase64(cropSpeech(rec.pcm, rec.sr), rec.sr), me);
+  }
+  // Microphone audio → 16 kHz 16-bit WAV (small enough to send quickly).
+  function wavBase64(pcm, sr) {
+    const x = to16k(pcm, sr), buf = new ArrayBuffer(44 + x.length * 2), v = new DataView(buf);
+    const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    w(0, "RIFF"); v.setUint32(4, 36 + x.length * 2, true); w(8, "WAVE"); w(12, "fmt ");
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 16000, true);
+    v.setUint32(28, 32000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, "data"); v.setUint32(40, x.length * 2, true);
+    for (let i = 0; i < x.length; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, x[i])) * 0x7fff, true);
+    const bytes = new Uint8Array(buf);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+
+  // ---- the key (entered by the learner on their own phone, never published)
+  function openAiKey() {
+    const has = !!aiKey();
+    $("#ai-key").value = "";
+    $("#ai-key").placeholder = has ? "✓ محفوظ — الصق مفتاحًا جديدًا لتغييره" : "AIza…";
+    $("#ai-remove").hidden = !has;
+    $("#ai-status").innerHTML = has ? AR("✓ المفتاح محفوظ في هذا الهاتف.") : "";
+    aiModal.hidden = false;
+    $("#ai-key").focus();
+  }
+  $("#ai-save").addEventListener("click", async () => {
+    const value = $("#ai-key").value.trim().replace(/\s+/g, "");
+    const status = $("#ai-status");
+    if (!value) { status.innerHTML = AR("الصق المفتاح أولًا."); return; }
+    const before = store.get(AI_KEY);
+    store.set(AI_KEY, value);
+    status.innerHTML = AR("أجرّب المفتاح …");
+    try {
+      const m = await aiPickModels();
+      status.innerHTML = AR("✓ يعمل! لينا جاهزة.") + ` <span class="de-note" dir="ltr">${esc(m.chat)}</span>`;
+      $("#ai-remove").hidden = false;
+      renderTalkModes();
+      setTimeout(() => { aiModal.hidden = true; }, 1200);
+    } catch (err) {
+      if (before) store.set(AI_KEY, before); else store.remove(AI_KEY);
+      status.innerHTML = !err.status ? AR("لا يوجد إنترنت. اتصل بالإنترنت ثم حاول مرة أخرى.")
+        : AR("هذا المفتاح لا يعمل. انسخه من جديد من Google AI Studio.") + ` <span class="de-note" dir="ltr">(${esc(err.status)})</span>`;
+    }
+  });
+  $("#ai-remove").addEventListener("click", () => {
+    [AI_KEY, AI_MODELS].forEach((k) => store.remove(k));
+    aiModal.hidden = true;
+    renderTalkModes();
+    toast(AR("حُذف المفتاح من هذا الهاتف."));
+  });
+  $("#ai-cancel").addEventListener("click", () => { aiModal.hidden = true; });
+  aiModal.addEventListener("click", (e) => { if (e.target === aiModal) aiModal.hidden = true; });
+
   // ---- the card in the page
   function renderTalkModes() {
     const box = $("#talk-modes");
     if (!box) return;
     if (!TALK) { box.closest(".topic").hidden = true; return; }
     const me = loadJSON(MEMORY_KEY, {});
-    const knows = Object.keys(me).some((k) => SLOT_AR[k]);
-    box.innerHTML = `
+    const knows = Object.keys(me).some((k) => SLOT_AR[k]) || loadJSON(AI_MEMORY, []).length > 0;
+    const remembers = me.name ? `${AR("يتذكرك:")} ${esc(me.name.v)}` : knows ? AR("يتذكر معلوماتك") : "";
+    const chatIcon = '<path d="M4 5h16v11H10l-5 4v-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>';
+    const robot = '<rect x="4" y="7" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>';
+    const offline = `
       <button class="test-mode talk-start" type="button" data-talk-start>
-        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4 5h16v11H10l-5 4v-4H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        <span class="tm-de">Gespräch beginnen</span>
-        <span class="tm-ar" lang="ar" dir="rtl">ابدأ المحادثة</span>
-        <span class="tm-desc">Der Partner fragt dich, erzählt von sich und erinnert sich an dich · <span lang="ar">الشريك يسألك، يحكي عن نفسه ويتذكرك</span></span>
-        <span class="tm-last">${me.name ? `${AR("يتذكرك:")} ${esc(me.name.v)}` : knows ? AR("يتذكر معلوماتك") : ""}</span>
-      </button>
-      ${knows ? '<button class="talk-forget" type="button" data-talk-forget lang="ar">انسَ معلوماتي</button>' : ""}`;
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${chatIcon}</svg>
+        <span class="tm-de">${aiKey() ? "Ohne Internet" : "Gespräch beginnen"}</span>
+        <span class="tm-ar" lang="ar" dir="rtl">${aiKey() ? "بدون إنترنت" : "ابدأ المحادثة"}</span>
+        <span class="tm-desc">Partner mit Sätzen aus deinen Lektionen · <span lang="ar">شريك بجمل من دروسك، يعمل بدون إنترنت</span></span>
+        <span class="tm-last">${aiKey() ? "" : remembers}</span>
+      </button>`;
+    const ai = aiKey() ? `
+      <button class="test-mode talk-start talk-ai" type="button" data-ai-start>
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${robot}</svg>
+        <span class="tm-de">Mit Lena sprechen</span>
+        <span class="tm-ar" lang="ar" dir="rtl">تكلّم مع لينا (ذكاء اصطناعي)</span>
+        <span class="tm-desc">Neue Fragen, versteht deine Stimme, erinnert sich · <span lang="ar">أسئلة جديدة، تفهم صوتك وتتذكرك · تحتاج إنترنت</span></span>
+        <span class="tm-last">${remembers}</span>
+      </button>` : `
+      <button class="test-mode talk-start talk-ai" type="button" data-ai-key>
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${robot}</svg>
+        <span class="tm-de">KI-Partnerin Lena</span>
+        <span class="tm-ar" lang="ar" dir="rtl">اجعل الشريك ذكيًا 🤖</span>
+        <span class="tm-desc">Mit einem kostenlosen Google-Schlüssel · <span lang="ar">بمفتاح مجاني من Google: تخترع أسئلة جديدة وتفهم صوتك</span></span>
+      </button>`;
+    box.innerHTML = `${aiKey() ? ai + offline : offline + ai}
+      <div class="talk-links">
+        ${aiKey() ? '<button class="talk-forget" type="button" data-ai-key lang="ar">🔑 مفتاح Gemini</button>' : ""}
+        ${knows ? '<button class="talk-forget" type="button" data-talk-forget lang="ar">انسَ معلوماتي</button>' : ""}
+      </div>`;
   }
   $("#talk-modes").addEventListener("click", (ev) => {
     if (ev.target.closest("[data-talk-start]")) { startTalk(); return; }
+    if (ev.target.closest("[data-ai-start]")) { startAI(); return; }
+    if (ev.target.closest("[data-ai-key]")) { openAiKey(); return; }
     if (ev.target.closest("[data-talk-forget]")) {
-      [MEMORY_KEY, TIPS_KEY].forEach((k) => store.remove(k));
+      [MEMORY_KEY, TIPS_KEY, "wortschatz-talk-history", AI_MEMORY, AI_ASKED, AI_OPENINGS, AI_SUMMARIES].forEach((k) => store.remove(k));
       renderTalkModes();
       toast(AR("نسيت معلوماتك. المحادثة القادمة تبدأ من جديد."));
     }
@@ -2524,8 +2992,25 @@ html:not(.js) .topic-test { display: none; }
     if (!t || t.disabled) return;
     const act = t.dataset.talk;
     if (act === "close") { closeTalk(); return; }
+    if (act === "offline") { startTalk(); return; }
+    if (act === "key") { openAiKey(); return; }
     if (!chat) return;
+    if (chat.ai) {
+      if (act === "again") startAI();
+      else if (act === "say") aiVoice(t.dataset.text, t.closest(".bubble.partner"));
+      else if (act === "speak") aiMic(t);
+      else if (act === "skip" && !chat.busy) { bubble("me", '<span lang="ar">لا أعرف</span>'); aiTurn("[HELP]"); }
+      else if (act === "end" && !chat.busy) { bubble("me pick", '<span lang="ar">إنهاء 👋</span>'); aiTurn("[END]"); }
+      return;
+    }
     if (act === "again") { startTalk(); return; }
+    if (act === "end" && chat.turn !== undefined && !chat.locked) {
+      chat.queue = [{ kind: "end" }];
+      chat.turn = null;
+      bubble("me pick", '<span lang="ar">إنهاء 👋</span>');
+      nextStep();
+      return;
+    }
     if (act === "play") {
       const e = chat.all.find((x) => x.id === t.dataset.id);
       if (e) speakLine(e, t.closest(".bubble.partner"));
@@ -2543,6 +3028,13 @@ html:not(.js) .topic-test { display: none; }
   });
   $("#talk-form").addEventListener("submit", (ev) => {
     ev.preventDefault();
+    if (chat && chat.ai) {
+      const text = talkInput.value.trim();
+      if (!text || chat.busy) return;
+      talkInput.value = "";
+      aiTurn(text, null, bubble("me", `<span lang="de" dir="auto">${esc(text)}</span>`));
+      return;
+    }
     if (!chat || chat.locked || !chat.turn) return;
     const raw = talkInput.value.trim();
     const r = checkTypedTalk(chat.turn, raw);
@@ -2553,7 +3045,7 @@ html:not(.js) .topic-test { display: none; }
   talk.addEventListener("keydown", (ev) => { if (ev.key === "Escape") closeTalk(); });
   renderTalkModes();
 
-  window.__talk = { startTalk, makeTurns, checkTypedTalk, checkTalk, dtwOpen, readFact, profileLines, get chat() { return chat; } };
+  window.__talk = { startTalk, startAI, makeTurns, checkTypedTalk, checkTalk, dtwOpen, readFact, profileLines, aiPrompt, parseAI, aiPickModels, get chat() { return chat; } };
 
   window.__speech = { features, dtw, checkWord, checkAmong, to16k, cropSpeech };
   window.__exam = { startExam, gradeWrite, makeQuestion, examEntries, get run() { return run; } };
