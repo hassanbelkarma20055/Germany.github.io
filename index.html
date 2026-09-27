@@ -2550,7 +2550,7 @@ html:not(.js) .topic-test { display: none; }
   const aiReady = () => !!aiKey() || !!AI_PROXY;
   const aiModal = $("#ai-modal");
   const ONE_FACT = ["name", "familienname", "land", "stadt", "alter", "beruf"];
-  let aiTtsOff = false;
+  let aiTtsOff = false, aiTtsPauseUntil = 0;
   const ttsCache = new Map();
 
   async function aiFetch(path, body) {
@@ -2564,6 +2564,7 @@ html:not(.js) .topic-test { display: none; }
     if (!res.ok) {
       const err = new Error((data.error && data.error.message) || res.statusText || "error");
       err.status = res.status;
+      err.daily = /PerDay/i.test(JSON.stringify(data.error || {}));   // the free daily limit of this model is used up
       throw err;
     }
     return data;
@@ -2586,13 +2587,17 @@ html:not(.js) .topic-test { display: none; }
     const flash = names.filter((n) => /flash/i.test(n) && !/lite/i.test(n) && plain(n)).sort(rank);
     const lite = names.filter((n) => /flash-lite/i.test(n) && plain(n)).sort(rank);
     const tts = names.filter((n) => /tts/i.test(n)).sort((a, b) => (/lite/i.test(b) - /lite/i.test(a)) || rank(a, b));
-    const models = { chat: flash[0] || lite[0] || "gemini-flash-latest", lite: lite[0] || "", tts: tts[0] || "", t: Date.now() };
+    // Fastest on the free tier first (measured 2026-09-27: 3.1 flash-lite ~6 s; the newest flash has only 20 free answers a day).
+    const PREFER = ["gemini-3.1-flash-lite", "gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3.6-flash",
+      "gemini-3.5-flash", "gemini-flash-lite-latest", "gemini-flash-latest"];
+    const chatList = [...PREFER.filter((n) => names.includes(n)), ...flash, ...lite].filter((n, i, all) => all.indexOf(n) === i && plain(n));
+    const models = { chat: chatList[0] || "gemini-flash-latest", lite: lite[0] || "", tts: tts[0] || "", list: chatList.slice(0, 8), ttsList: tts.slice(0, 4), t: Date.now() };
     store.set(AI_MODELS, JSON.stringify(models));
     return models;
   }
   async function aiModels() {
     const m = loadJSON(AI_MODELS, null);
-    return m && m.chat && Date.now() - m.t < 7 * 864e5 ? m : aiPickModels();
+    return m && m.chat && m.list && Date.now() - m.t < 7 * 864e5 ? m : aiPickModels();
   }
 
   // ---- what Lena knows: the lessons, the learner, earlier conversations
@@ -2701,22 +2706,44 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       question: str(r.question), summary_ar: str(r.summary_ar)
     };
   }
-  let aiBusyUntil = 0;   // the main model was overloaded: use the smaller one for a while
+  // Lena answers faster when she thinks less: "low" thinking took 2-8 s instead of about 10 s (tested
+  // 2026-09-27). The main model goes first: on the free tier the lite models were much slower (10-97 s).
+  const noThinking = new Set();   // models that refuse the thinking setting
+  const AI_SPENT = "wortschatz-ai-spent";   // {model: day} — models whose free daily limit is used up
+  const googleDay = () => new Date(Date.now() - 8 * 3600e3).toISOString().slice(0, 10);   // quotas reset at midnight Pacific
+  const busyUntil = {};
+  const usable = (list) => {
+    const spent = loadJSON(AI_SPENT, {}), day = googleDay(), now = Date.now();
+    const ok = list.filter((m) => spent[m] !== day && !(busyUntil[m] > now));
+    return ok.length ? ok : list;   // all used up or busy: try them anyway
+  };
+  function modelFailed(model, err) {
+    if (err.status === 429 && err.daily) {
+      const spent = loadJSON(AI_SPENT, {});
+      spent[model] = googleDay();
+      store.set(AI_SPENT, JSON.stringify(spent));
+    } else if ([429, 500, 503].includes(err.status)) {
+      busyUntil[model] = Date.now() + 90000;   // overloaded right now: skip it for a moment
+    }
+  }
   async function aiAsk(contents) {
     let models = await aiModels(), last = null;
-    const body = { systemInstruction: { parts: [{ text: aiPrompt(chat.all) }] }, contents,
-      generationConfig: { responseMimeType: "application/json", temperature: 1 } };
+    const request = (model) => ({ systemInstruction: { parts: [{ text: aiPrompt(chat.all) }] }, contents,
+      generationConfig: Object.assign({ responseMimeType: "application/json", temperature: 1 },
+        noThinking.has(model) ? {} : { thinkingConfig: { thinkingLevel: /lite/.test(model) ? "minimal" : "low" } }) });
     for (let round = 0; round < 2; round++) {
-      const order = Date.now() < aiBusyUntil ? [models.lite, models.chat] : [models.chat, models.lite];
-      for (const model of order.filter(Boolean)) {
+      const tries = usable(models.list || [models.chat, models.lite].filter(Boolean)).slice(0, 5);
+      for (let i = 0; i < tries.length; i++) {
+        const model = tries[i];
         try {
-          const data = await aiFetch(`models/${model}:generateContent`, body);
+          const data = await aiFetch(`models/${model}:generateContent`, request(model));
           const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
           return parseAI(parts.filter((p) => p.text && !p.thought).map((p) => p.text).join(""));
         } catch (err) {
           last = err;
-          if (![404, 429, 500, 503].includes(err.status)) throw err;   // busy or model gone: try the next one
-          if (model === models.chat && err.status !== 404) aiBusyUntil = Date.now() + 10 * 60000;
+          if (err.status === 400 && /think/i.test(err.message) && !noThinking.has(model)) { noThinking.add(model); i--; continue; }
+          if (![404, 429, 500, 503].includes(err.status)) throw err;   // busy, used up or gone: the next model at once
+          modelFailed(model, err);
         }
       }
       if (last && last.status === 404 && round === 0) models = await aiPickModels(); else break;
@@ -2754,14 +2781,22 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       const recorded = my && my.all.find((x) => simplify(x.de) === simplify(text));
       if (recorded) { await say(recorded.li); return; }
       const models = await aiModels().catch(() => ({}));
-      if (models.tts && !aiTtsOff) {
+      const voices = usable(models.ttsList && models.ttsList.length ? models.ttsList : [models.tts].filter(Boolean));
+      if (voices.length && !aiTtsOff && Date.now() > aiTtsPauseUntil) {
         try {
           let buf = ttsCache.get(text);
-          if (!buf) {
-            const data = await aiFetch(`models/${models.tts}:generateContent`, {
+          for (let v = 0; !buf && v < Math.min(2, voices.length); v++) {
+            let data;
+            try {
+              data = await aiFetch(`models/${voices[v]}:generateContent`, {
               contents: [{ parts: [{ text }] }],
               generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } }
-            });
+              });
+            } catch (err) {
+              modelFailed(voices[v], err);
+              if (v + 1 < Math.min(2, voices.length) && [429, 500, 503].includes(err.status)) continue;
+              throw err;
+            }
             const part = ((((data.candidates || [])[0] || {}).content || {}).parts || []).find((p) => p.inlineData && p.inlineData.data);
             if (!part) throw new Error("no audio");
             buf = await pcmToBuffer(part.inlineData);
@@ -2771,7 +2806,8 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
           await playBuffer(buf);
           return;
         } catch (err) {
-          if (err.status === 429 || err.status === 403 || err.status === 404) aiTtsOff = true;   // no natural voice for now
+          if (err.status === 429) aiTtsPauseUntil = Date.now() + 60000;   // the free voice limit: the phone's voice for a minute
+          else if (err.status === 403 || err.status === 404) aiTtsOff = true;
         }
       }
       if (chat === my) await speakFallback(text);
