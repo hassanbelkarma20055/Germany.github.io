@@ -2683,7 +2683,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
     }
     return out;
   }
-  const questionKey = (q) => simplify(q).replace(/(du|sie|dein|deine|ihr|ihre)/g, "").replace(/\s+/g, " ").trim();
+  const questionKey = (q) => simplify(q).replace(/\b(du|sie|dein|deine|ihr|ihre)\b/g, "").replace(/\s+/g, " ").trim();
 
   function parseAI(text) {
     let s = String(text || "").trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
@@ -2701,12 +2701,14 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       question: str(r.question), summary_ar: str(r.summary_ar)
     };
   }
+  let aiBusyUntil = 0;   // the main model was overloaded: use the smaller one for a while
   async function aiAsk(contents) {
     let models = await aiModels(), last = null;
     const body = { systemInstruction: { parts: [{ text: aiPrompt(chat.all) }] }, contents,
       generationConfig: { responseMimeType: "application/json", temperature: 1 } };
     for (let round = 0; round < 2; round++) {
-      for (const model of [models.chat, models.lite].filter(Boolean)) {
+      const order = Date.now() < aiBusyUntil ? [models.lite, models.chat] : [models.chat, models.lite];
+      for (const model of order.filter(Boolean)) {
         try {
           const data = await aiFetch(`models/${model}:generateContent`, body);
           const parts = (((data.candidates || [])[0] || {}).content || {}).parts || [];
@@ -2714,6 +2716,7 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
         } catch (err) {
           last = err;
           if (![404, 429, 500, 503].includes(err.status)) throw err;   // busy or model gone: try the next one
+          if (model === models.chat && err.status !== 404) aiBusyUntil = Date.now() + 10 * 60000;
         }
       }
       if (last && last.status === 404 && round === 0) models = await aiPickModels(); else break;
@@ -2786,7 +2789,12 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
       <span class="talk-de" lang="de" dir="ltr">${esc(r.reply_de)}</span>
       <span class="talk-ar" lang="ar" dir="rtl">${esc(r.reply_ar)}</span>${words}`);
   }
+  const DU_FORMS = [[/^Du heiße\b/i, "Du heißt"], [/^Du heisse\b/i, "Du heißt"], [/^Du komme\b/i, "Du kommst"], [/^Du wohne\b/i, "Du wohnst"],
+    [/^Du bin\b/i, "Du bist"], [/^Du spreche\b/i, "Du sprichst"], [/^Du studiere\b/i, "Du studierst"], [/^Du lerne\b/i, "Du lernst"],
+    [/^Du arbeite\b/i, "Du arbeitest"], [/^Du habe\b/i, "Du hast"]];
+  const duForm = (de) => DU_FORMS.reduce((t, [re, to]) => t.replace(re, to), String(de).trim());
   function aiRemember(r, my) {
+    r.remember.forEach((f) => { f.de = duForm(f.de); });
     if (r.remember.length) {
       let facts = loadJSON(AI_MEMORY, []);
       for (const f of r.remember) {
@@ -2877,10 +2885,10 @@ RECENT OPENINGS (do not repeat): ${loadJSON(AI_OPENINGS, []).join(" | ") || "-"}
     } else if (meBubble && message !== "[START]" && message !== "[HELP]" && message !== "[END]") {
       meBubble.classList.add("ok");
     }
-    if (r.help_ar) coach(esc(r.help_ar));
     aiRemember(r, my);
     if (message === "[START]") store.set(AI_OPENINGS, JSON.stringify([r.reply_de, ...loadJSON(AI_OPENINGS, [])].slice(0, 6)));
     const el = aiLine(r);
+    if (r.help_ar) coach(esc(r.help_ar));
     if (message === "[END]") {
       if (r.summary_ar) {
         const date = new Date().toLocaleDateString("de-DE");
