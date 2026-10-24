@@ -1070,7 +1070,7 @@ html:not(.js) .xp-btn { display: none; }
 
   // ---- speech check: compare the learner's voice with the word recorded in several German voices.
   // features() and dtw() must stay identical to speech.py.
-  const SPEECH = {"sr":16000,"win":400,"hop":160,"nfft":512,"nmel":26,"ncep":12,"fmin":20.0,"fmax":7600.0,"preemph":0.97,"vadDb":30.0,"minFrames":12,"qscale":24.0,"margin":0.04,"absMax":3.8,"templatesUrl":"speech-51dd4710a9.json"};
+  const SPEECH = {"sr":16000,"win":400,"hop":160,"nfft":512,"nmel":26,"ncep":12,"fmin":20.0,"fmax":7600.0,"preemph":0.97,"vadDb":30.0,"minFrames":12,"qscale":24.0,"margin":0.04,"absMax":3.8,"templatesUrl":"speech-f894f87181.json"};
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const mel = (f) => 2595 * Math.log10(1 + f / 700);
   const imel = (m) => 700 * (Math.pow(10, m / 2595) - 1);
